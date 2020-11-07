@@ -111,7 +111,7 @@ class Command(BaseCommand):
                     lat, long, _ = convert(geo_x, geo_y)
                 else:
                     lat = long = 0.0
-                nesreca = Nesreca(zaporedna_stevilka=zap_st,
+                nesrece_dict[zap_st] = nesreca = Nesreca(zaporedna_stevilka=zap_st,
                     klasifikacija=klas, ue_storitve=ue_stor, datum=datum,
                     ura=ura + ":00", v_naselju=v_naselju, lokacija=lok,
                     vrsta_ceste=vrsta_ceste,
