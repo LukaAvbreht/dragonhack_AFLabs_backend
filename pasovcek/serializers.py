@@ -61,7 +61,7 @@ class OsebaSerializer(serializers.ModelSerializer):
         model = Oseba
         fields = ("id", "zaporedna_stevilka", "nesreca", "vpn_stevilka", "je_povzrocitelj",
         "starost", "spol", "poskodba", "vrsta_udelezenca", "vozniski_staz", "uporaba_pasu", "vrednost_alkotesta",
-        "strokovni_pregled", "drzavljanstvo", "use_prebivalisca")
+        "strokovni_pregled", "drzavljanstvo")
 
 
 class NesrecaSerializer(serializers.ModelSerializer):
