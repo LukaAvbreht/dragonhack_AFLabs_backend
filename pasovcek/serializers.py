@@ -56,6 +56,16 @@ class VrstaVoziscaSerializer(serializers.ModelSerializer):
         model = VrstaVozisca
         fields = ("id", "ime")
 
+class VrstaPrometaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VrstaVozisca
+        fields = ("id", "ime")
+
+class UpravnaEnotaStoritveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UpravnaEnotaStoritve
+        fields = ("id", "ime")
+
 class OsebaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Oseba

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets, mixins
 from pasovcek.models import Nesreca, Oseba
+from pasovcek.models import KlasifikacijaNesrece, Lokacija, VrstaCeste, VzrokNesrece, TipNesrece, VremenskeOkoliscine, StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve
+from pasovcek.serializers import KlasifikacijaSerializer, LokacijaSerializer, VrstaCesteSerializer, VzrokNesreceSerializer, TipNesreceSerializer, VremenskeOkoliscineSerializer, StanjePrometaSerializer, VrstaPrometaSerializer, StanjeVoziscaSerializer, VrstaVoziscaSerializer, UpravnaEnotaStoritveSerializer
 from pasovcek.serializers import NesrecaSerializer, OsebaSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -62,3 +64,19 @@ class OsebaViewSet(viewsets.GenericViewSet,
     def get_queryset(self):
         return super().get_queryset()
 
+
+class OtherViewSet(viewsets.GenericViewSet):
+    @action(methods=["GET"], detail=False)
+    def other(self, request, *args, **kwargs):
+        models = [KlasifikacijaNesrece, Lokacija, VrstaCeste, VzrokNesrece, TipNesrece, VremenskeOkoliscine,
+                  StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve]
+        serializers = [KlasifikacijaSerializer, LokacijaSerializer, VrstaCesteSerializer, VzrokNesreceSerializer,
+                       TipNesreceSerializer, VremenskeOkoliscineSerializer, StanjePrometaSerializer,
+                       VrstaPrometaSerializer, StanjeVoziscaSerializer, VrstaVoziscaSerializer, UpravnaEnotaStoritveSerializer]
+
+        data = {}
+        for i, m in enumerate(models):
+            objs = m.objects.all()
+            data[m.__name__] = serializers[i](objs, many=True).data
+
+        return Response(data)
