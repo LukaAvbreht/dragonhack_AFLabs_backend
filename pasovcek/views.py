@@ -57,7 +57,7 @@ class NesrecaViewSet(viewsets.GenericViewSet,
         lon = float(request.query_params.get("lon", None))
         x = float(request.query_params.get("x", None))
         y = float(request.query_params.get("y", None))
-        nesrece = Nesreca.objects.filter(lat__gte=lat-x, lat__lte=lat+x, long__gte=lon-y, long__lte=lon+y)
+        nesrece = self.get_queryset().filter(lat__gte=lat-x, lat__lte=lat+x, long__gte=lon-y, long__lte=lon+y)
         #paginator = LimitOffsetPagination()
         #pnesrece = paginator.paginate_queryset(nesrece, request)
         serializer = NesrecaSerializerGeolocation(nesrece, many=True)
