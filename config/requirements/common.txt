@@ -9,3 +9,4 @@ django-rest-swagger
 django-simple-history
 djangorestframework
 djangorestframework-simplejwt
+psycopg2

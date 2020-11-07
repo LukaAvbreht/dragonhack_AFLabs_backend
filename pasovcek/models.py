@@ -5,58 +5,85 @@ from django.db import models
 
 nb = dict(null=True, blank=True)
 
-
 class KlasifikacijaNesrece(models.Model):
     ime = models.CharField(max_length=192)
+
+    def __str__(self):
+        return self.ime
 
 
 class UpravnaEnotaStoritve(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
+
 
 class Lokacija(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class VrstaCeste(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class SifraCeste(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class SifraOdsekaUlice(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class VzrokNesrece(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class TipNesrece(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class VremenskeOkoliscine(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class StanjePrometa(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class VrstaPrometa(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class StanjeVozisca(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class VrstaVozisca(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class Nesreca(models.Model):
     zaporedna_stevilka = models.CharField(max_length=64, **nb)
@@ -92,14 +119,21 @@ class Nesreca(models.Model):
 class TipPoskodbe(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class VrstaUdelezenca(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
 
 class Drzavljanstvo(models.Model):
     ime = models.CharField(max_length=192)
 
+    def __str__(self):
+        return self.ime
+        
 class Oseba(models.Model):
     zaporedna_stevilka = models.CharField(max_length=64, **nb)
     nesreca = models.ForeignKey(to=Nesreca, on_delete=models.PROTECT,
