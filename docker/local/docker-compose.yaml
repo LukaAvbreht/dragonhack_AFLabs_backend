@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  postgresdb:
+    container_name: ${COMPOSE_PROJECT_NAME}_db
+    image: postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:${DB_PROXY_PORT}:5432"
+    #volumes:
+    #  - ./db-data/:/var/lib/postgresql/data
+
+  appserver:
+    container_name: ${COMPOSE_PROJECT_NAME}_server
+    user: ${USER_UID}:${USER_GID}
+    build:
+      context: ../../
+      dockerfile: docker/local/Dockerfile
+    environment:
+      SETTINGS_NAME: ${SETTINGS_NAME}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${COMPOSE_PROJECT_NAME}_db
+      DB_PORT: 5432
+      SECRET_KEY: ${SECRET_KEY}
+    ports:
+      - "127.0.0.1:${LISTEN_PORT}:8000"
+    depends_on:
+      - postgresdb
+    volumes:
+      - ../../:/app
+
