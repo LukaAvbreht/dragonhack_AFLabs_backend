@@ -144,6 +144,9 @@ class Nesreca(models.Model):
     geo_x = models.FloatField(**nb)
     geo_y = models.FloatField(**nb)
 
+    lat = models.FloatField(**nb)
+    long = models.FloatField(**nb)
+
 
 class TipPoskodbe(models.Model):
     ime = models.CharField(max_length=192)
