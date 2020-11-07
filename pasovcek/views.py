@@ -27,6 +27,10 @@ class NesrecaViewSet(viewsets.GenericViewSet,
         if datum_lte is not None:
             nesrece = nesrece.filter(datum__lte=datum_lte)
 
+        year = self.request.query_params.get("year", None)
+        if year is not None:
+            nesrece = nesrece.filter(datum__year=year)
+
         filters = ["lokacija","vrsta_ceste","sifra_ceste","text_ceste_naselja","sifra_odseka_ulice",
                    "text_odseka_ulice","stacionaza_dogodka","opis_kraja","vzrok_nesrece","tip_nesrece",
                    "vremenske_okoliscine","stanje_prometa","stanje_vozisca","vrsta_vozisca"]
