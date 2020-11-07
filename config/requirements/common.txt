@@ -7,6 +7,5 @@ django-cors-headers
 django-method-override
 django-rest-swagger
 django-simple-history
-djangorestframework
 djangorestframework-simplejwt
 psycopg2
