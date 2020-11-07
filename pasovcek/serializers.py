@@ -104,3 +104,9 @@ class NesrecaSerializer(serializers.ModelSerializer):
         "lokacija", "vrsta_ceste", "sifra_ceste", "sifra_odseka_ulice", "vzrok_nesrece",
         "tip_nesrece", "vremenske_okoliscine", "stanje_prometa", "stanje_vozisca", "vrsta_vozisca",
         "geo_x", "geo_y", "udelezenci")
+
+
+class NesrecaSerializerGeolocation(serializers.ModelSerializer):
+    class Meta:
+        model = Nesreca
+        fields = ("id", "lat", "long")

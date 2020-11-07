@@ -3,7 +3,7 @@ from rest_framework import viewsets, mixins
 from pasovcek.models import Nesreca, Oseba
 from pasovcek.models import KlasifikacijaNesrece, Lokacija, VrstaCeste, VzrokNesrece, TipNesrece, VremenskeOkoliscine, StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve, OpisKraja
 from pasovcek.serializers import KlasifikacijaSerializer, LokacijaSerializer, VrstaCesteSerializer, VzrokNesreceSerializer, TipNesreceSerializer, VremenskeOkoliscineSerializer, StanjePrometaSerializer, VrstaPrometaSerializer, StanjeVoziscaSerializer, VrstaVoziscaSerializer, UpravnaEnotaStoritveSerializer, OpisKrajaSerializer
-from pasovcek.serializers import NesrecaSerializer, OsebaSerializer
+from pasovcek.serializers import NesrecaSerializer, NesrecaSerializerGeolocation, OsebaSerializer
 from pasovcek.models import TextCesteNaselja
 from pasovcek.serializers import TextCesteNaseljaSerializer
 from rest_framework.decorators import action
@@ -43,10 +43,10 @@ class NesrecaViewSet(viewsets.GenericViewSet,
         x = float(request.query_params.get("x", None))
         y = float(request.query_params.get("y", None))
         nesrece = Nesreca.objects.filter(lat__gte=lat-x, lat__lte=lat+x, long__gte=lon-y, long__lte=lon+y)
-        paginator = LimitOffsetPagination()
-        pnesrece = paginator.paginate_queryset(nesrece, request)
-        serializer = NesrecaSerializer(pnesrece, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        #paginator = LimitOffsetPagination()
+        #pnesrece = paginator.paginate_queryset(nesrece, request)
+        serializer = NesrecaSerializerGeolocation(nesrece, many=True)
+        return Response(serializer.data)
     
     @action(methods=["GET"], detail=False)
     def letna_statistika(self, request, *args, **kwargs):
