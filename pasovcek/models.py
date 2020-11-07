@@ -100,11 +100,6 @@ class VrstaUdelezenca(models.Model):
 class Drzavljanstvo(models.Model):
     ime = models.CharField(max_length=192)
 
-
-class UEStalnegaPrebivalisca(models.Model):
-    ime = models.CharField(max_length=192)
-
-
 class Oseba(models.Model):
     zaporedna_stevilka = models.CharField(max_length=64, **nb)
     nesreca = models.ForeignKey(to=Nesreca, on_delete=models.PROTECT,
