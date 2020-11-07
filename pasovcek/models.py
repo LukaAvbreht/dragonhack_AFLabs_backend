@@ -31,6 +31,10 @@ class VrstaCeste(models.Model):
     def __str__(self):
         return self.ime
 
+class TextCesteNaselja(models.Model):
+    ime = models.CharField(max_length=192)
+
+
 class SifraCeste(models.Model):
     ime = models.CharField(max_length=192)
 
@@ -42,6 +46,17 @@ class SifraOdsekaUlice(models.Model):
 
     def __str__(self):
         return self.ime
+
+class TextOdsekaUlice(models.Model):
+    ime = models.CharField(max_length=192)
+
+
+class StacionazaDogodka(models.Model):
+    ime = models.CharField(max_length=192)
+
+class OpisKraja(models.Model):
+    ime = models.CharField(max_length=192)
+
 
 class VzrokNesrece(models.Model):
     ime = models.CharField(max_length=192)
@@ -89,6 +104,9 @@ class Nesreca(models.Model):
     zaporedna_stevilka = models.CharField(max_length=64, **nb)
     klasifikacija = models.ForeignKey(to=KlasifikacijaNesrece,
                                       on_delete=models.PROTECT, **nb)
+    ue_storitve = models.ForeignKey(to=UpravnaEnotaStoritve,
+                                    on_delete=models.PROTECT, **nb)
+
     datum = models.DateField(**nb)
     ura = models.TimeField(**nb)
     v_naselju = models.BooleanField(**nb)
@@ -97,8 +115,19 @@ class Nesreca(models.Model):
                                     **nb)
     sifra_ceste = models.ForeignKey(on_delete=models.PROTECT, to=SifraCeste,
                                     **nb)
+    text_ceste_naselja = models.ForeignKey(on_delete=models.PROTECT,
+                                           to=TextCesteNaselja, **nb)
     sifra_odseka_ulice = models.ForeignKey(on_delete=models.PROTECT,
                                            to=SifraOdsekaUlice, **nb)
+    text_odseka_ulice = models.ForeignKey(on_delete=models.PROTECT,
+                                           to=TextOdsekaUlice, **nb)
+
+    stacionaza_dogodka = models.ForeignKey(on_delete=models.PROTECT,
+                                   to=StacionazaDogodka, **nb)
+
+    opis_kraja = models.ForeignKey(on_delete=models.PROTECT,
+                                   to=OpisKraja, **nb)
+
     vzrok_nesrece = models.ForeignKey(on_delete=models.PROTECT,
                                       to=VzrokNesrece, **nb)
     tip_nesrece = models.ForeignKey(on_delete=models.PROTECT, to=TipNesrece,
@@ -153,4 +182,5 @@ class Oseba(models.Model):
     strokovni_pregled = models.FloatField(**nb)
     drzavljanstvo = models.ForeignKey(to=Drzavljanstvo,
                                       on_delete=models.PROTECT, **nb)
-    use_prebivalisca = models.ForeignKey(to=UpravnaEnotaStoritve, on_delete=models.PROTECT, **nb)
+    ue_prebivalisca = models.ForeignKey(to=UpravnaEnotaStoritve,
+                                        on_delete=models.PROTECT, **nb)
