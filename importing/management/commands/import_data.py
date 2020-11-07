@@ -116,9 +116,9 @@ class Command(BaseCommand):
             )
 
             vpn = line["ZaporednaStevilkaOsebeVPN"]
-            je_povr = line["Povzrocitelj"] == "POVZROČITELJ"
+            je_povr = line["Povzrocitelj"] != "UDELEŽENEC"
             star = int(line["Starost"])
-            spol = line["Spol"] == "ŽENSKA"
+            spol = line["Spol"] == "ŽENSKI"
             posk = poskodbe_dict[line["PoskodbaUdelezenca"]]
             vrsta_ud = vrsta_ud_dict[line["VrstaUdelezenca"]]
 
