@@ -34,6 +34,21 @@ class NesrecaViewSet(viewsets.GenericViewSet,
             if self.request.query_params.get(filter, None) is not None:
                 nesrece = nesrece.filter(**{filter: self.request.query_params.get(filter, None)})
 
+        starost = self.request.query_params.get("povzrocitelj_starost", None)
+        if starost is not None:
+            starost = int(starost)
+            nesrece = nesrece.filter(udelezenci__je_povzrocitelj=True, udelezenci__starost__gte=starost, udelezenci__starost__lte=starost+10)
+
+        alkohol = self.request.query_params.get("povzrocitelj_alkohol", None)
+        if alkohol is not None:
+            alkohol = float(alkohol)
+            nesrece = nesrece.filter(udelezenci__je_povzrocitelj=True, udelezenci__vrednost_alkotesta__gte=alkohol)
+
+        spol = self.request.query_params.get("povzrocitelj_spol", None)
+        if spol is not None:
+            spol = int(spol)
+            nesrece = nesrece.filter(udelezenci__je_povzrocitelj=True, udelezenci__spol__gte=spol)
+
         return nesrece
 
     @action(methods=["GET"], detail=False)
