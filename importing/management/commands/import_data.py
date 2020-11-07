@@ -3,7 +3,7 @@ from datetime import date
 from typing import Tuple, List, Set
 import os.path
 from django.core.management.base import BaseCommand
-from django.db import connection
+from django.db import connection, transaction
 
 import csv
 
@@ -149,7 +149,12 @@ class Command(BaseCommand):
                 drzavljanstvo=drz, ue_prebivalisca=u_dict[line["UEStalnegaPrebivalisca"]]
             ))
 
-        Nesreca.objects.bulk_create(list(nesrece_dict.values()))
+        with transaction.atomic():
+            for nesreca in list(nesrece_dict.values()):
+                nesreca.save()
+
+        for o in osebe:
+            o.nesreca_id = o.nesreca.id
         Oseba.objects.bulk_create(osebe)
 
 import math
