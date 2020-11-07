@@ -78,7 +78,7 @@ class TextOdsekaUliceAdmin(admin.ModelAdmin):
 
 @admin.register(Oseba)
 class OsebaAdmin(admin.ModelAdmin):
-    list_display = ("vrsta_udelezenca", "je_povzrocitelj", "starost", "spol",
+    list_display = ("vrsta_udelezenca", "datum", "ura", "je_povzrocitelj", "starost", "spol",
                     # "poskodba", "vozniski_staz",
                     "vrednost_alkotesta", "drzavljanstvo", "ue_prebivalisca",
                     "nesreca__text_ceste_naselja__ime",
@@ -86,6 +86,12 @@ class OsebaAdmin(admin.ModelAdmin):
                     "nesreca__vzrok_nesrece__ime", "nesreca__tip_nesrece__ime")
     list_filter = ("spol", "je_povzrocitelj", "drzavljanstvo", "poskodba", "vrsta_udelezenca", "ue_prebivalisca")
     autocomplete_fields = ["nesreca"]
+
+    def datum(self, obj):
+        return obj.nesreca.datum
+
+    def ura(self, obj):
+        return obj.nesreca.ura
 
     def nesreca__text_ceste_naselja__ime(self, obj):
         return obj.nesreca.text_ceste_naselja.ime

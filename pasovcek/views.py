@@ -4,6 +4,7 @@ from pasovcek.models import Nesreca, Oseba
 from pasovcek.serializers import NesrecaSerializer, OsebaSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.pagination import LimitOffsetPagination
 
 class NesrecaViewSet(viewsets.GenericViewSet,
                     mixins.RetrieveModelMixin,
@@ -30,6 +31,18 @@ class NesrecaViewSet(viewsets.GenericViewSet,
                 nesrece = nesrece.filter(**{filter: self.request.query_params.get(filter, None)})
 
         return nesrece
+
+    @action(methods=["GET"], detail=False)
+    def geolocation(self, request, *args, **kwargs):
+        lat = float(request.query_params.get("lat", None))
+        lon = float(request.query_params.get("lon", None))
+        x = float(request.query_params.get("x", None))
+        y = float(request.query_params.get("y", None))
+        nesrece = Nesreca.objects.filter(lat__gte=lat-x, lat__lte=lat+x, long__gte=lon-y, long__lte=lon+y)
+        paginator = LimitOffsetPagination()
+        pnesrece = paginator.paginate_queryset(nesrece, request)
+        serializer = NesrecaSerializer(pnesrece, many=True)
+        return paginator.get_paginated_response(serializer.data)
     
     @action(methods=["GET"], detail=False)
     def letna_statistika(self, request, *args, **kwargs):
