@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from rest_framework import viewsets, mixins
 from pasovcek.models import Nesreca, Oseba
-from pasovcek.models import KlasifikacijaNesrece, Lokacija, VrstaCeste, VzrokNesrece, TipNesrece, VremenskeOkoliscine, StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve
-from pasovcek.serializers import KlasifikacijaSerializer, LokacijaSerializer, VrstaCesteSerializer, VzrokNesreceSerializer, TipNesreceSerializer, VremenskeOkoliscineSerializer, StanjePrometaSerializer, VrstaPrometaSerializer, StanjeVoziscaSerializer, VrstaVoziscaSerializer, UpravnaEnotaStoritveSerializer
+from pasovcek.models import KlasifikacijaNesrece, Lokacija, VrstaCeste, VzrokNesrece, TipNesrece, VremenskeOkoliscine, StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve, OpisKraja
+from pasovcek.serializers import KlasifikacijaSerializer, LokacijaSerializer, VrstaCesteSerializer, VzrokNesreceSerializer, TipNesreceSerializer, VremenskeOkoliscineSerializer, StanjePrometaSerializer, VrstaPrometaSerializer, StanjeVoziscaSerializer, VrstaVoziscaSerializer, UpravnaEnotaStoritveSerializer, OpisKrajaSerializer
 from pasovcek.serializers import NesrecaSerializer, OsebaSerializer
+from pasovcek.models import TextCesteNaselja
+from pasovcek.serializers import TextCesteNaseljaSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
@@ -65,14 +67,32 @@ class OsebaViewSet(viewsets.GenericViewSet,
         return super().get_queryset()
 
 
+class TextCesteNaseljaViewSet(viewsets.GenericViewSet,
+                mixins.RetrieveModelMixin,
+                mixins.ListModelMixin):
+
+    queryset = TextCesteNaselja.objects.all()
+    serializer_class = TextCesteNaseljaSerializer
+
+    def get_queryset(self):
+        texts = TextCesteNaselja.objects.all()
+
+        contains = self.request.query_params.get("contains", None)
+        if contains is not None:
+            texts = texts.filter(ime__icontains=contains)
+
+        return texts
+
+
 class OtherViewSet(viewsets.GenericViewSet):
     @action(methods=["GET"], detail=False)
     def other(self, request, *args, **kwargs):
         models = [KlasifikacijaNesrece, Lokacija, VrstaCeste, VzrokNesrece, TipNesrece, VremenskeOkoliscine,
-                  StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve]
+                  StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve, OpisKraja]
         serializers = [KlasifikacijaSerializer, LokacijaSerializer, VrstaCesteSerializer, VzrokNesreceSerializer,
                        TipNesreceSerializer, VremenskeOkoliscineSerializer, StanjePrometaSerializer,
-                       VrstaPrometaSerializer, StanjeVoziscaSerializer, VrstaVoziscaSerializer, UpravnaEnotaStoritveSerializer]
+                       VrstaPrometaSerializer, StanjeVoziscaSerializer, VrstaVoziscaSerializer, UpravnaEnotaStoritveSerializer,
+                       OpisKrajaSerializer]
 
         data = {}
         for i, m in enumerate(models):

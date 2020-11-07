@@ -66,6 +66,16 @@ class UpravnaEnotaStoritveSerializer(serializers.ModelSerializer):
         model = UpravnaEnotaStoritve
         fields = ("id", "ime")
 
+class OpisKrajaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OpisKraja
+        fields = ("id", "ime")
+
+class TextCesteNaseljaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TextCesteNaselja
+        fields = ("id", "ime")
+
 class OsebaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Oseba
