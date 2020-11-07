@@ -69,7 +69,8 @@ class DrzavljanstvoAdmin(admin.ModelAdmin):
 @admin.register(Oseba)
 class OsebaAdmin(admin.ModelAdmin):
     list_display = ("nesreca", "je_povzrocitelj", "starost", "spol", "poskodba", "vrsta_udelezenca",
-    "vozniski_staz", "vrednost_alkotesta")
+    "vozniski_staz", "vrednost_alkotesta", "drzavljanstvo", "ue_prebivalisca")
+    list_filter = ("spol", "je_povzrocitelj", "drzavljanstvo", "poskodba", "vrsta_udelezenca", "ue_prebivalisca")
 
 @admin.register(Nesreca)
 class NesrecaAdmin(admin.ModelAdmin):
