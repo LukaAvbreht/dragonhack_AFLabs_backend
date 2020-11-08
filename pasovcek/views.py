@@ -9,6 +9,7 @@ from pasovcek.serializers import TextCesteNaseljaSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
+import requests
 
 class NesrecaViewSet(viewsets.GenericViewSet,
                     mixins.RetrieveModelMixin,
@@ -57,10 +58,20 @@ class NesrecaViewSet(viewsets.GenericViewSet,
 
     @action(methods=["GET"], detail=False)
     def geolocation(self, request, *args, **kwargs):
-        lat = float(request.query_params.get("lat", None))
-        lon = float(request.query_params.get("lon", None))
-        x = float(request.query_params.get("x", None))
-        y = float(request.query_params.get("y", None))
+        lat = float(request.query_params.get("lat", 46.056946))
+        lon = float(request.query_params.get("lon", 14.505751))
+        x = float(request.query_params.get("x", 0.03))
+        y = float(request.query_params.get("y", 0.03))
+        address = request.query_params.get("address", None)
+        if address is not None:
+            r = requests.get("https://maps.googleapis.com/maps/api/geocode/json",
+                             params={"key": "AIzaSyBnGvM0xkLCQV7z7okLx42ieOhM1vqVIok", "address": address})
+            try:
+                lat = r.json()['results'][0]['geometry']['location']['lat']
+                lon = r.json()['results'][0]['geometry']['location']['lng']
+            except:
+                pass
+
         nesrece = self.get_queryset().filter(lat__gte=lat-x, lat__lte=lat+x, long__gte=lon-y, long__lte=lon+y)
         #paginator = LimitOffsetPagination()
         #pnesrece = paginator.paginate_queryset(nesrece, request)
