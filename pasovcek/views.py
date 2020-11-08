@@ -10,6 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
 import requests
+import re
 from datetime import datetime, date, timedelta
 
 class NesrecaViewSet(viewsets.GenericViewSet,
@@ -114,6 +115,24 @@ class NesrecaViewSet(viewsets.GenericViewSet,
                 break
 
         return Response(data)
+
+    @action(methods=["get"], detail=False)
+    def statistics(self, request, *args, **kwargs):
+        models = [KlasifikacijaNesrece, Lokacija, VrstaCeste, VzrokNesrece, TipNesrece, VremenskeOkoliscine,
+                  StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve, OpisKraja]
+        mnames = [m.__name__ for m in models]
+
+        data = {}
+        stats = request.query_params.get("stats", None)
+        if stats is not None and stats in mnames:
+            m = models[mnames.index(stats)]
+            t_name = re.sub(r'(?<!^)(?=[A-Z])', '_', m.__name__).lower()
+            objs = m.objects.all()
+            for obj in objs:
+                data[obj.ime] = self.get_queryset().filter(**{t_name: obj}).count()
+
+        return Response(data)
+
 
 class OsebaViewSet(viewsets.GenericViewSet,
                 mixins.RetrieveModelMixin,
