@@ -64,7 +64,10 @@ class NesrecaViewSet(viewsets.GenericViewSet,
         x = float(request.query_params.get("x", 0.03))
         y = float(request.query_params.get("y", 0.03))
         address = request.query_params.get("address", None)
-        if address is not None:
+        address_id = request.query_params.get("address_id", None)
+        if address is not None or address_id is not None:
+            if address_id is not None:
+                address = TextCesteNaselja.objects.get(pk=address_id).ime
             r = requests.get("https://maps.googleapis.com/maps/api/geocode/json",
                              params={"key": "AIzaSyBnGvM0xkLCQV7z7okLx42ieOhM1vqVIok", "address": address})
             try:
@@ -77,8 +80,8 @@ class NesrecaViewSet(viewsets.GenericViewSet,
         #paginator = LimitOffsetPagination()
         #pnesrece = paginator.paginate_queryset(nesrece, request)
         serializer = NesrecaSerializerGeolocation(nesrece, many=True)
-        return Response(serializer.data)
-    
+        return Response({"locations": serializer.data, "lat": lat, "long": lon})
+
     @action(methods=["GET"], detail=False)
     def letna_statistika(self, request, *args, **kwargs):
         year = 2000
