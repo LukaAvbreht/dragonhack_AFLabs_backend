@@ -10,6 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
 import requests
+from datetime import datetime, date, timedelta
 
 class NesrecaViewSet(viewsets.GenericViewSet,
                     mixins.RetrieveModelMixin,
@@ -80,11 +81,36 @@ class NesrecaViewSet(viewsets.GenericViewSet,
     
     @action(methods=["GET"], detail=False)
     def letna_statistika(self, request, *args, **kwargs):
-        return Response("Tu bo prišla letna statistika")
+        year = 2000
+        data = {}
+        while True:
+            start_date = date(year, 1, 1)
+            end_date = date(year + 1, 1, 1)
+            year += 1
+            nesreces = Nesreca.objects.filter(datum__gte=start_date, datum__lt=end_date)
+            data[start_date.strftime('%Y-%m-%d')] = nesreces.count()
+            if start_date.strftime('%Y-%m-%d') == '2020-01-01':
+                break
+        return Response(data)
 
     @action(methods=["get"], detail=False)
     def mesecna_statistika(self, request, *args, **kwargs):
-        return Response("Tu bo prišla mesečna statistika")
+        year = 2000
+        month = 1
+        data = {}
+        while True:
+            start_date = date(year, month, 1)
+            if month == 12:
+                year+=1
+                month = 0
+            end_date = date(year, month+1, 1)
+            month += 1
+            nesreces = Nesreca.objects.filter(datum__gte=start_date, datum__lt=end_date)
+            data[start_date.strftime('%Y-%m-%d')] = nesreces.count()
+            if start_date.strftime('%Y-%m-%d') == '2020-08-01':
+                break
+
+        return Response(data)
 
 class OsebaViewSet(viewsets.GenericViewSet,
                 mixins.RetrieveModelMixin,
