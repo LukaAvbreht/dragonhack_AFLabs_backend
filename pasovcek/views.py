@@ -132,6 +132,9 @@ class NesrecaViewSet(viewsets.GenericViewSet,
         models = [KlasifikacijaNesrece, Lokacija, VrstaCeste, VzrokNesrece, TipNesrece, VremenskeOkoliscine,
                   StanjePrometa, VrstaPrometa, StanjeVozisca, VrstaVozisca, UpravnaEnotaStoritve, OpisKraja]
         mnames = [m.__name__ for m in models]
+        tnames = ['klasifikacija', 'lokacija', 'vrsta_ceste', 'vzrok_nesrece', 'tip_nesrece',
+                  'vremenske_okoliscine', 'stanje_prometa', 'vrsta_prometa', 'stanje_vozisca', 'vrsta_vozisca',
+                  'ue_storitve', 'opis_kraja']
 
         data = {}
         stats = request.query_params.get("stats", None)
@@ -147,7 +150,7 @@ class NesrecaViewSet(viewsets.GenericViewSet,
 
         if stats is not None and stats in mnames:
             m = models[mnames.index(stats)]
-            t_name = re.sub(r'(?<!^)(?=[A-Z])', '_', m.__name__).lower()
+            t_name = tnames[mnames.index(stats)]
             objs = m.objects.all()
             for obj in objs:
                 data[obj.ime] = self.get_queryset().filter(**{t_name: obj}).count()

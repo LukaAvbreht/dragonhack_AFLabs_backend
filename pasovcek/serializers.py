@@ -76,6 +76,16 @@ class TextCesteNaseljaSerializer(serializers.ModelSerializer):
         model = TextCesteNaselja
         fields = ("id", "ime")
 
+class VrstaUdelezencaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VrstaUdelezenca
+        fields = ("id", "ime")
+
+class DrzavljanstvoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Drzavljanstvo
+        fields = ("id", "ime")
+
 class OsebaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Oseba
