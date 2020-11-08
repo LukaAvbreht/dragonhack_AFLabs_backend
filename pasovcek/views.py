@@ -41,6 +41,15 @@ class NesrecaViewSet(viewsets.GenericViewSet,
             if self.request.query_params.get(filter, None) is not None:
                 nesrece = nesrece.filter(**{filter: self.request.query_params.get(filter, None)})
 
+        starost_min = self.request.query_params.get("povzrocitelj_starost_min", None)
+        starost_max = self.request.query_params.get("povzrocitelj_starost_max", None)
+        if starost_min is not None and starost_max is not None:
+            nesrece = nesrece.filter(udelezenci__je_povzrocitelj=True, udelezenci__starost__gte=int(starost_min), udelezenci__starost__lte=int(starost_max))
+        elif starost_min is not None:
+            nesrece = nesrece.filter(udelezenci__je_povzrocitelj=True, udelezenci__starost__gte=int(starost_min))
+        elif starost_max is not None:
+            nesrece = nesrece.filter(udelezenci__je_povzrocitelj=True, udelezenci__starost__lte=int(starost_max))
+
         starost = self.request.query_params.get("povzrocitelj_starost", None)
         if starost is not None:
             starost = int(starost)
@@ -124,6 +133,16 @@ class NesrecaViewSet(viewsets.GenericViewSet,
 
         data = {}
         stats = request.query_params.get("stats", None)
+        if stats is not None and stats == 'spol':
+            data[0] = self.get_queryset().filter(udelezenci__je_povzrocitelj=True, udelezenci__spol__gte=0).count()
+            data[1] = self.get_queryset().filter(udelezenci__je_povzrocitelj=True, udelezenci__spol__gte=1).count()
+
+        if stats is not None and stats == 'starost':
+            starost_interval = int(request.query_params.get("starost_interval", 10))
+            for i in range(0, 120, starost_interval):
+                data[i] = self.get_queryset().filter(udelezenci__je_povzrocitelj=True, udelezenci__starost__gte=i,
+                                                     udelezenci__starost__lt=i+starost_interval).count()
+
         if stats is not None and stats in mnames:
             m = models[mnames.index(stats)]
             t_name = re.sub(r'(?<!^)(?=[A-Z])', '_', m.__name__).lower()
