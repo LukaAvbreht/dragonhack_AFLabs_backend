@@ -6,6 +6,7 @@ from pasovcek.serializers import KlasifikacijaSerializer, LokacijaSerializer, Vr
 from pasovcek.serializers import NesrecaSerializer, NesrecaSerializerGeolocation, OsebaSerializer
 from pasovcek.models import TextCesteNaselja
 from pasovcek.serializers import TextCesteNaseljaSerializer
+from pasovcek.utils import mesecna_statistika_cache
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
@@ -111,7 +112,8 @@ class NesrecaViewSet(viewsets.GenericViewSet,
         year = 2000
         month = 1
         data = {}
-        while True:
+        data = mesecna_statistika_cache()
+        while False:
             start_date = date(year, month, 1)
             if month == 12:
                 year+=1
